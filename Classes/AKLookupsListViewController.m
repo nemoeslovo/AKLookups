@@ -78,6 +78,9 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([self.delegate respondsToSelector:@selector(lookupsItemCellHeight)]) {
+        return [self.delegate lookupsItemCellHeight];
+    }
 	return PERFECT_CELL_HEIGHT;
 }
 

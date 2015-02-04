@@ -17,6 +17,8 @@
 
 @protocol AKLookupsListDelegate <AKLookupsDelegate>
 -(void)lookups:(AKDropdownViewController*)lookups didSelectItem:(id<AKLookupsCapableItem>)item;
+@optional
+-(CGFloat)lookupsItemCellHeight;
 @end
 
 @interface AKLookupsListViewController : AKDropdownViewController
