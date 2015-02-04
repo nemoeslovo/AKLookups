@@ -15,10 +15,14 @@
 -(id<AKLookupsCapableItem>)lookupsSelectedItem;
 @end
 
+typedef UITableViewCell* (^LookupsCellConfiguration)(UITableViewCell *);
 @protocol AKLookupsListDelegate <AKLookupsDelegate>
 -(void)lookups:(AKDropdownViewController*)lookups didSelectItem:(id<AKLookupsCapableItem>)item;
 @optional
 -(CGFloat)lookupsItemCellHeight;
+-(Class)lookupsCellClass;
+-(UINib*)lookupsCellNib;
+-(void)lookups:(AKDropdownViewController*)lookups configureCell:(UITableViewCell*)cell;
 @end
 
 @interface AKLookupsListViewController : AKDropdownViewController
