@@ -10,10 +10,12 @@
 #define MT_COLOR(R, G, B, A) \
 [UIColor colorWithRed:(R)/(255.0) green:(G)/(255.0) blue:(B)/(255.0) alpha:(A)]
 
-
+static NSString * cellId = @"lookupslistcell";
 @interface AKLookupsListViewController ()  <UITableViewDataSource,UITableViewDelegate>
 {
 	id<AKLookupsCapableItem> _selectedListItem;
+
+
 }
 @end
 
@@ -28,6 +30,13 @@
 	_tableView.scrollEnabled = NO;
 	_tableView.backgroundColor = [UIColor whiteColor];
     _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    
+    if ([self.delegate respondsToSelector:@selector(lookupsCellClass)]) {
+        [self.tableView registerClass:[self.delegate lookupsCellClass]  forCellReuseIdentifier:cellId];
+    } else if ([self.delegate respondsToSelector:@selector(lookupsCellNib)]) {
+        [self.tableView registerNib:[self.delegate lookupsCellNib] forCellReuseIdentifier:cellId];
+    }
+    
     [self.contentView addSubview:_tableView];
 }
 
@@ -51,12 +60,14 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * cellId = @"lookupslistcell";
     UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if(!cell){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
 	[self configureCell:cell atIndexPath:indexPath];
+    if ([self.delegate respondsToSelector:@selector(lookups:configureCell:)]) {
+        [self.delegate lookups:self configureCell:cell];
+    }
     return cell;
 }
 
@@ -78,6 +89,9 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([self.delegate respondsToSelector:@selector(lookupsItemCellHeight)]) {
+        return [self.delegate lookupsItemCellHeight];
+    }
 	return PERFECT_CELL_HEIGHT;
 }
 
